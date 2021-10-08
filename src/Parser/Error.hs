@@ -1,4 +1,4 @@
-module Parser.Error(ParserError, printError) where
+module Parser.Error(ParserError(ParserError), printError) where
 
 import Parser.Context
 import System.Console.ANSI
@@ -14,8 +14,8 @@ lineInfo :: ParserContext -> String
 lineInfo ctx =
   let cno = show $ charNo ctx
    in case source ctx of
-        FileSource filename lineNo _ -> concat [filename, ":", show lineNo, ":", cno]
-        ReplSource -> "stdin:" ++ cno
+        FileSource filename lineNo -> concat [filename, ":", show lineNo, ":", cno]
+        StdinSource -> "stdin:" ++ cno
 
 -- |Prints the error message itself.
 printErrorLine :: ParserError -> IO ()
@@ -32,6 +32,7 @@ printErrorLine e = do
 makePointingString :: Int -> String
 makePointingString n = concat (replicate (n - 1) " ") ++ "^"
 
+-- |Truncates a string to a length centering around an index.
 truncToLengthWithIndex :: Int -> Int -> String -> String
 truncToLengthWithIndex len idx string =
   let deficit = length string - len

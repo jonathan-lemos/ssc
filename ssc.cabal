@@ -25,13 +25,13 @@ source-repository head
 
 library
   exposed-modules:
-      Context.ParserContext
       Lib
       Parser.Context
       Parser.Error
       Parser.Parser
+      Parser.Parsers.Char
+      Parser.Parsers.ConsumeWhile
       Parser.Parsers.Identifier
-      Parser.Parsers.TakeWhile
   other-modules:
       Paths_ssc
   hs-source-dirs:
