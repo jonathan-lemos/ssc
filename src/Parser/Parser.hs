@@ -30,8 +30,8 @@ instance Monad Parser where
       transform (Left e) = Left e
   
 
-parseValue :: a -> Either ParserError a
-parseValue = Right
+parseValue :: a -> ParserSequence -> Either ParserError (a, ParserSequence)
+parseValue = (Right .) . (,)
 
 parseError :: ParserContext -> String -> Either ParserError a
 parseError ctx msg = Left $ ParserError ctx msg

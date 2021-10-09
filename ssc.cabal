@@ -27,6 +27,7 @@ library
   exposed-modules:
       Lib
       Parser.Context
+      Parser.Context.Utils
       Parser.Error
       Parser.Parser
       Parser.Parsers.Char

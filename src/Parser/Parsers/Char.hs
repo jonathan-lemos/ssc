@@ -1,17 +1,12 @@
 module Parser.Parsers.Char where
 
-import Parser.Parser
-import Parser.Context
 import Control.Monad.Trans.State.Lazy (state)
+import Parser.Context
 import Parser.Error
-
-
-func :: ParserSequence -> (Either ParserError Char, ParserSequence)
-func ((ch, ctx) :<> xs) = (parse ch, xs)
-func (EOF x) = parseError x "Expected a character, but there wasn't one to parse."
+import Parser.Parser
 
 char :: Parser Char
-char = state func
+char = Parser f
   where
-    func ((ch, ctx) :<> xs) = (parse ch, xs)
-    func (EOF x) = parseError x "Expected a character, but there wasn't one to parse."
+    f ((ch, ctx) :<> xs) = parseValue ch xs
+    f (EOF x) = parseError x "Expected a character, but there wasn't one to parse."
