@@ -11,4 +11,16 @@ toListAndEOF = go [] where
 toList :: ParserSequence -> [(Char, ParserContext)]
 toList = fst . toListAndEOF
 
-foldrWhile :: (Char -> ParserContext -> a -> a) -> ParserSequence
+foldWhile :: (Char -> ParserContext -> b -> Either a b) -> b -> ParserSequence -> (Maybe a, ParserSequence)
+foldWhile f val ((ch, ctx) :<> xs) =
+    case f ch ctx val of
+        Left a -> (Just a, (ch, ctx) :<> xs)
+        Right b -> foldWhile f b xs
+foldWhile f val (EOF e) = (Nothing, EOF e) 
+
+accumulateWhile :: (Char -> ParserContext -> a -> Either a a) -> a -> ParserSequence -> (a, ParserSequence)
+accumulateWhile f val ((ch, ctx) :<> xs) =
+    case f ch ctx val of
+        Left a -> (a, (ch, ctx) :<> xs)
+        Right b -> accumulateWhile f b xs
+accumulateWhile f val (EOF e) = (val, EOF e)

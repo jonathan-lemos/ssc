@@ -6,25 +6,29 @@ import GHC.Base (String)
 import Parser.Context
 import Parser.Error
 import Parser.Parser
+import Parser.Context.Utils
 
--- | A parser that consumes characters while the predicate is true.
-consumeWhile :: (Char -> Bool) -> Parser String
-consumeWhile pred = Parser (f "")
+-- | A parser that consumes characters while the current character, `ParserContext`, and accumulated string satisfy the given predicate, returning all of the characters consumed.
+-- The string passed to the predicate includes all characters processed *before* the current character.
+consumeWhile :: (Char -> ParserContext -> String -> Bool) -> Parser String
+consumeWhile pred = Parser $ Right . f
   where
-    f buf seq = case seq of
-      ((ch, ctx) :<> xs) ->
-        if pred ch
-          then f (ch : buf) xs
-          else parseValue buf seq
-      EOF ctx -> parseValue buf seq
+    folder char ctx string =
+      if pred char ctx string
+        then Right (char : string)
+        else Left string
+    f = accumulateWhile folder ""
 
--- | A parser that consumes characters while the predicate is true.
+-- | A parser that consumes characters while the current character satisfies the given predicate, returning all of the characters consumed.
+consumeWhileChar :: (Char -> Bool) -> Parser String
+consumeWhileChar pred = consumeWhile $ const . const . pred
+
+-- | A parser that consumes characters while the current character satisfies the given predicate, returning all of the characters consumed.
 consumeWhileString :: (String -> Bool) -> Parser String
-consumeWhileString pred = Parser (f "")
+consumeWhileString pred = Parser $ Right . f
   where
-    f buf seq = case seq of
-      ((ch, ctx) :<> xs) ->
-        if pred (ch : buf)
-          then f (ch : buf) xs
-          else parseValue buf seq
-      EOF ctx -> parseValue buf seq
+    folder char _ctx string =
+      if pred string
+        then Right (char : string)
+        else Left string
+    f = accumulateWhile folder ""
