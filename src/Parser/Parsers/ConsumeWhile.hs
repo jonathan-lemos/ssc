@@ -23,12 +23,6 @@ consumeWhile pred = Parser $ Right . f
 consumeWhileChar :: (Char -> Bool) -> Parser String
 consumeWhileChar pred = consumeWhile $ const . const . pred
 
--- | A parser that consumes characters while the current character satisfies the given predicate, returning all of the characters consumed.
+-- | A parser that consumes characters while the current accumulated string satisfies the given predicate, returning said string.
 consumeWhileString :: (String -> Bool) -> Parser String
-consumeWhileString pred = Parser $ Right . f
-  where
-    folder char _ctx string =
-      if pred string
-        then Right (char : string)
-        else Left string
-    f = accumulateWhile folder ""
+consumeWhileString pred = consumeWhile $ const $ const pred

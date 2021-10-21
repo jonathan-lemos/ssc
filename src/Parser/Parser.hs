@@ -1,16 +1,14 @@
 module Parser.Parser where
 
-import Control.Monad (join)
 import Control.Monad.Trans.State (State)
 import Parser.Context (ParserContext (ParserContext), ParserSequence)
 import Parser.Error (ParserError (ParserError))
+import Parser.Utils (mapFirst)
 
 newtype Parser t = Parser {parse :: ParserSequence -> Either ParserError (t, ParserSequence)}
 
 instance Functor Parser where
-  fmap f (Parser o) = Parser $ fmap (mapTuple f) . o
-    where
-      mapTuple f (a, b) = (f a, b)
+  fmap f (Parser o) = Parser $ fmap (mapFirst f) . o
 
 instance Applicative Parser where
   pure = Parser . (Right .) . (,)

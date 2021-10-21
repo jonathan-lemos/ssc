@@ -31,8 +31,11 @@ library
       Parser.Error
       Parser.Parser
       Parser.Parsers.Char
+      Parser.Parsers.Conditional
+      Parser.Parsers.ConditionalMap
       Parser.Parsers.ConsumeWhile
       Parser.Parsers.Identifier
+      Parser.Utils
   other-modules:
       Paths_ssc
   hs-source-dirs:
