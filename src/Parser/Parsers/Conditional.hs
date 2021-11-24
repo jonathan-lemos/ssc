@@ -1,6 +1,12 @@
 module Parser.Parsers.Conditional where
-import Parser.Parser
 
-conditional :: String -> (a -> Bool) -> Parser a -> Parser a
-conditional msg validator = conditionalMap mapper where
-    mapper = 
+import Parser.Parser
+import Parser.Utils
+
+conditional :: (a -> Bool) -> (a -> String) -> Parser a -> Parser a
+conditional predicate messageMapper parser = do
+  v <- parser
+  if predicate v then
+    return v
+  else
+    reject $ messageMapper v

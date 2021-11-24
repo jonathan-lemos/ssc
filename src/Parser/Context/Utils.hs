@@ -1,6 +1,6 @@
 module Parser.Context.Utils where
 import Parser.Context
-import Parser.Utils
+import Utils
 
 -- | Converts a ParserSequence into the equivalent list and EOF.
 toListAndEOF :: ParserSequence -> ([(Char, ParserContext)], ParserContext)

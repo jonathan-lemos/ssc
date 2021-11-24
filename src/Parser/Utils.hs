@@ -1,12 +1,15 @@
 module Parser.Utils where
-import GHC.Unicode (isAlphaNum)
 
-unite :: Either a a -> a
-unite (Left a) = a
-unite (Right a) = a
+import Parser.Parser
+import Parser.Error
+import Parser.Context
 
-mapFirst :: (a -> b) -> (a, c) -> (b, c)
-mapFirst f (a, b) = (f a, b)
 
-mapSecond :: (b -> c) -> (a, b) -> (a, c)
-mapSecond f (a, b) = (a, f b)
+parseValue :: a -> ParserSequence -> Either ParserError (a, ParserSequence)
+parseValue = (Right .) . (,)
+
+parseError :: ParserContext -> String -> Either ParserError a
+parseError ctx msg = Left $ ParserError ctx msg
+
+reject :: String -> Parser a
+reject msg = Parser $ \seq -> Left ParserError { message = msg, context = seqContext seq }

@@ -61,3 +61,7 @@ fromFile :: String -> IO ParserSequence
 fromFile filename = do
   contents <- readFile filename
   return . fromLines filename $ linesWithNewlineChar contents
+
+seqContext :: ParserSequence -> ParserContext
+seqContext ((_char, ctx) :<> _xs) = ctx
+seqContext (EOF ctx) = ctx

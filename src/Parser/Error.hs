@@ -1,4 +1,4 @@
-module Parser.Error(ParserError(ParserError), printError) where
+module Parser.Error(ParserError(ParserError), printError, context, message) where
 
 import Parser.Context
 import System.Console.ANSI
