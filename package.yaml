@@ -28,6 +28,7 @@ library:
   - ansi-terminal
   - transformers
   - hscurses
+  - numbers
 
 executables:
   ssc-exe:

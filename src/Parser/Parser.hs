@@ -5,6 +5,7 @@ import Parser.Error
 import Utils (mapFirst)
 import Control.Monad
 
+-- | A function that takes in a sequence of tokens and returns a value and a new sequence (after the parsed section), or an error.
 newtype Parser t = Parser {parse :: ParserSequence -> Either ParserError (t, ParserSequence)}
 
 instance Functor Parser where

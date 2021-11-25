@@ -36,7 +36,9 @@ library
       Parser.Parsers.ConsumeWhile
       Parser.Parsers.Identifier
       Parser.Parsers.Token
+      Parser.Parsers.Whitespace
       Parser.Utils
+      Types.Scalar
       Utils
   other-modules:
       Paths_ssc
@@ -46,6 +48,7 @@ library
       ansi-terminal
     , base >=4.7 && <5
     , hscurses
+    , numbers
     , transformers
   default-language: Haskell2010
 

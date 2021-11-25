@@ -2,17 +2,24 @@ module Parser.Context where
 
 -- | Describes the origin of the characters the parser is iterating over.
 data ParserSource
-  = FileSource
-      { filename :: String,
+  = -- | The parser's input comes from a file.
+    FileSource
+      { -- | The filename that the line comes from.
+        filename :: String,
+        -- | The line number within the original source.
         lineNo :: Int
       }
-  | StdinSource
+  | -- | The parser's input comes from standard input.
+    StdinSource
   deriving (Eq, Show)
 
 -- | Describes a position in the sequence of characters the parser is iterating over.
 data ParserContext = ParserContext
-  { charNo :: Int,
+  { -- | The 0-indexed character number within the currentLine
+    charNo :: Int,
+    -- | The current line
     currentLine :: String,
+    -- | The origin of the character sequence
     source :: ParserSource
   }
   deriving (Eq, Show)
@@ -54,7 +61,7 @@ linesWithNewlineChar s = f s "" []
   where
     f ('\n' : xs) buf ret = f xs "" (buf : ret)
     f (x : xs) buf ret = f xs (x : buf) ret
-    f [] buf ret = reverse ret
+    f [] _buf ret = reverse ret
 
 -- | Makes a `ParserSequence` from a filename.
 fromFile :: String -> IO ParserSequence
@@ -62,6 +69,13 @@ fromFile filename = do
   contents <- readFile filename
   return . fromLines filename $ linesWithNewlineChar contents
 
-seqContext :: ParserSequence -> ParserContext
-seqContext ((_char, ctx) :<> _xs) = ctx
-seqContext (EOF ctx) = ctx
+-- | Denotes that a type can be converted to a ParserContext
+class HasContext t where
+  getContext :: t -> ParserContext
+
+instance HasContext ParserSequence where
+  getContext ((_char, ctx) :<> _xs) = ctx
+  getContext (EOF ctx) = ctx
+
+instance HasContext ParserContext where
+  getContext = id
