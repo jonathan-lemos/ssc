@@ -4,6 +4,8 @@ import Parser.Context
 import Parser.Error
 import Utils (mapFirst)
 import Control.Monad
+import Data.Default
+import Control.Applicative (Alternative)
 
 -- | A function that takes in a sequence of tokens and returns a value and a new sequence (after the parsed section), or an error.
 newtype Parser t = Parser {parse :: ParserSequence -> Either ParserError (t, ParserSequence)}

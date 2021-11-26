@@ -29,6 +29,7 @@ library:
   - transformers
   - hscurses
   - numbers
+  - data-default
 
 executables:
   ssc-exe:

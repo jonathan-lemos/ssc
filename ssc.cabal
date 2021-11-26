@@ -25,6 +25,8 @@ source-repository head
 
 library
   exposed-modules:
+      AST.Identifier
+      AST.Number
       Lib
       Parser.Context
       Parser.Context.Utils
@@ -34,7 +36,9 @@ library
       Parser.Parsers.Conditional
       Parser.Parsers.ConditionalMap
       Parser.Parsers.ConsumeWhile
-      Parser.Parsers.Identifier
+      Parser.Parsers.Epsilon
+      Parser.Parsers.FirstOf
+      Parser.Parsers.Match
       Parser.Parsers.Token
       Parser.Parsers.Whitespace
       Parser.Utils
@@ -47,6 +51,7 @@ library
   build-depends:
       ansi-terminal
     , base >=4.7 && <5
+    , data-default
     , hscurses
     , numbers
     , transformers

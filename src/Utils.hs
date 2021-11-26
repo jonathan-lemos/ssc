@@ -10,6 +10,10 @@ mapFirst f (a, b) = (f a, b)
 mapSecond :: (b -> c) -> (a, b) -> (a, c)
 mapSecond f (a, b) = (a, f b)
 
+mapLeft :: (a -> c) -> Either a b -> Either c b
+mapLeft f (Left a) = Left $ f a
+mapLeft _ (Right b) = Right b
+
 trimStart :: (t -> Bool) -> [t] -> [t]
 trimStart predicate (x:xs) =
   if predicate x then trimStart predicate xs else x:xs

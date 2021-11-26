@@ -1,4 +1,4 @@
-module Parser.Parsers.Identifier where
+module AST.Identifier where
 
 import Data.Char (isAlpha, isAlphaNum)
 import Parser.Parser
