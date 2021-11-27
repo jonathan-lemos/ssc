@@ -10,9 +10,3 @@ char = Parser f
   where
     f ((ch, _ctx) :<> xs) = parseValue ch xs
     f (EOF x) = parseError x "Expected a character, but there wasn't one to parse."
-    
-matchChar :: Char -> Parser Char
-matchChar c =
-  conditional
-    (== c)
-    

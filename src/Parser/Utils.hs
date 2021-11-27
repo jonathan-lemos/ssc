@@ -17,14 +17,21 @@ parseError ctx msg = Left $ ParserError (getContext ctx) msg
 reject :: String -> Parser a
 reject msg = Parser $ \seq -> Left ParserError { message = msg, errContext = getContext seq }
 
-maybeReject :: Maybe a -> String -> Parser a
-maybeReject mb msg =
+-- | Conditionally returns a value or an error message depending on if the first argument is True or False.
+conditionalReturn :: Bool -> a -> String -> Parser a
+conditionalReturn True value _errMsg = pure value
+conditionalReturn False _value errMsg = reject errMsg
+
+-- | Returns the given value if the Maybe is Just, otherwise returns an error with the given message.
+maybeReturn :: Maybe a -> String -> Parser a
+maybeReturn mb msg =
   case mb of
     Just v -> pure v
     Nothing -> reject msg
 
-eitherReject :: Either String a -> Parser a
-eitherReject e =
+-- | Returns the given value if the Either is Right, otherwise returns an error with the Left message.
+eitherReturn :: Either String a -> Parser a
+eitherReturn e =
   case e of
     Left msg -> reject msg
     Right v -> pure v

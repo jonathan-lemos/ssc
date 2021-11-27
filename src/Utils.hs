@@ -29,3 +29,11 @@ trimEnd predicate list = result where
 
 trim :: (t -> Bool) -> [t] -> [t]
 trim predicate = trimStart predicate . trimEnd predicate
+
+maybeToEither :: a -> Maybe b -> Either a b
+maybeToEither _ (Just v) = Right v
+maybeToEither v Nothing = Left v
+
+eitherToMaybe :: Either a b -> Maybe b
+eitherToMaybe (Left _) = Nothing
+eitherToMaybe (Right v) = Just v

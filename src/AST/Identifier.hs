@@ -2,16 +2,15 @@ module AST.Identifier where
 
 import Data.Char (isAlpha, isAlphaNum)
 import Parser.Parser
-import Parser.Parsers.Conditional
-import Parser.Parsers.Token (token)
-
-isIdentifier :: String -> Bool
-isIdentifier (x : xs) = (x == '_' || isAlpha x) && all isAlphaNum xs
-isIdentifier [] = False
+import Parser.Parsers.Char
+import Parser.Parsers.ConsumeWhile
+import Parser.Utils
 
 identifier :: Parser String
-identifier =
-  conditional
-    isIdentifier
-    (\s -> concat ["Expected an identifier, but '", s, "' is not a valid identifier."])
-    token
+identifier = do
+  first <- char
+  rest <- consumeWhileChar isAlphaNum
+  if first /= '_' && not (isAlpha first) then
+    reject $ concat ["Identifiers must start with _ or a-zA-Z (read '", first, "')"]
+  else
+    return $ first : rest
